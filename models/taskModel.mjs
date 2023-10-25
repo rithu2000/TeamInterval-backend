@@ -4,7 +4,6 @@ const db = new Sequelize('teamInterval', 'root', 'password', {
     host: '127.0.0.1',
     dialect: 'mysql'
 });
-
 const Task = db.define('Task', {
     heading: {
         type: DataTypes.STRING,
@@ -23,7 +22,7 @@ const Task = db.define('Task', {
         allowNull: false
     },
     image: {
-        type: DataTypes.STRING, // You can store the image file path
+        type: DataTypes.STRING,
         allowNull: true
     },
     priority: {
@@ -37,8 +36,6 @@ const Task = db.define('Task', {
 }, {
     timestamps: true,
 });
-
-// Create the "tasks" table in the database if it doesn't exist
 await db.sync();
 
 export default Task;

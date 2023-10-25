@@ -3,13 +3,15 @@ import cors from 'cors'
 import taskRoute from './routes/route.js'
 import connect from './database/connection.js';
 import { fileURLToPath } from 'url';
-import path,{ dirname } from 'path';
+import path, { dirname } from 'path';
 
+// Path and Port
 const app = express();
 const port = 8000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Use
 app.use(
     cors({
         origin: ["http://localhost:3000"],
@@ -18,14 +20,11 @@ app.use(
         exposedHeaders: ["Content-Length", "X-Foo", "X-Bar"],
     })
 );
-
 app.use(express.json());
 app.use('/api', taskRoute);
-
 app.use(express.static(path.join(__dirname, 'uploads')));
 
-
-
+// Connection
 connect().then(() => {
     try {
         app.listen(port, () => {
@@ -35,5 +34,5 @@ connect().then(() => {
         console.log('Cannot connect to the Server');
     }
 }).catch(error => {
-    console.log(error,'Invalid Database connection...!');
+    console.log(error, 'Invalid Database connection...!');
 })
