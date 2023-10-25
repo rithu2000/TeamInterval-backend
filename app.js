@@ -1,10 +1,14 @@
 import express from 'express'
 import cors from 'cors'
-import userRoute from './routes/route.js'
+import taskRoute from './routes/route.js'
 import connect from './database/connection.js';
+import { fileURLToPath } from 'url';
+import path,{ dirname } from 'path';
 
 const app = express();
 const port = 8000;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(
     cors({
@@ -16,7 +20,11 @@ app.use(
 );
 
 app.use(express.json());
-app.use('/api', userRoute);
+app.use('/api', taskRoute);
+
+app.use(express.static(path.join(__dirname, 'uploads')));
+
+
 
 connect().then(() => {
     try {

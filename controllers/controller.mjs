@@ -3,7 +3,6 @@ import Task from "../models/taskModel.mjs";
 // Show task
 export const getTask = async (req, res) => {
   try {
-    console.log(req.query,'entha rama ith');
     const { priority } = req.query;
     let whereCondition = {};
     if (priority && priority !== 'all') {
@@ -14,7 +13,7 @@ export const getTask = async (req, res) => {
       where: whereCondition,
       order: [['added_date_time', 'ASC']]
     });
-    console.log(tasks,'rithu');
+    console.log(tasks, 'rithu');
 
     return res.status(200).json(tasks);
   } catch (error) {
@@ -26,7 +25,7 @@ export const getTask = async (req, res) => {
 // Add a new task.
 export const addTask = async (req, res) => {
   try {
-    const { heading, description, date, time, image, priority } = req.body;
+    const { heading, description, date, time, priority } = req.body;
     const addedDateTime = new Date();
 
     const task = await Task.create({
@@ -34,10 +33,12 @@ export const addTask = async (req, res) => {
       description,
       date,
       time,
-      image,
+      image:req.file.filename,
       priority,
       added_date_time: addedDateTime,
     });
+
+    console.log('Task added successfully');
 
     return res.status(200).json({ message: 'Task added successfully', task });
   } catch (error) {
@@ -50,7 +51,9 @@ export const addTask = async (req, res) => {
 export const editTask = async (req, res) => {
   try {
     const taskId = req.params.id;
-    const { heading, description, date, time, image, priority } = req.body;
+    const image = req.file
+    console.log(req.file);
+    const { heading, description, date, time, priority } = req.body;
 
     const task = await Task.findByPk(taskId);
 
@@ -62,7 +65,7 @@ export const editTask = async (req, res) => {
     task.description = description;
     task.date = date;
     task.time = time;
-    task.image = image;
+    task.image = image.filename;
     task.priority = priority;
 
     await task.save();
